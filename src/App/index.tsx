@@ -13,9 +13,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import { Suspense } from 'react'
 import Style from './styles/index.less'
+import Menu from '@/Menu'
 
 const Model = () => {
-  const gltf = useLoader(GLTFLoader, './public/person/man.gltf')
+  const gltf = useLoader(GLTFLoader, './public/aaa/aaa.gltf')
   return (
     <>
       <primitive object={gltf.scene} />
@@ -39,6 +40,7 @@ export default function App() {
           <primitive object={light} />
         </Suspense>
       </Canvas>
+      <Menu />
     </div>
   )
 }

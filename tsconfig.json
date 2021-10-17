@@ -19,19 +19,23 @@
       ],
       "module": "commonjs",
       "moduleResolution": "node",
-      "typeRoots": ["types", "./node_modules/@types"],
+      "typeRoots": ["@types", "./node_modules/@types"],
       "paths": {
-          "@":["src"],
-          "@T": ["theme"],
-          "@U": ["utils"],
-          "@three":["node_modules/three/examples/js/loaders"]
+          "@":["../src"],
+          "@/*": [
+            "../src/*"
+          ],
+          "@API": ["../api"],
+          "@T": ["../theme"],
+          "@U": ["../utils"],
+          "@three":["../node_modules/three/examples/js/loaders"]
       },
       "emitDecoratorMetadata": true
   },
   "include": [
       "src",
-      "types/index.d.ts",
-      "types/less.d.ts"
+      "@types/index.d.ts",
+      "@types/definition.d.ts"
   ],
   "exclude": [
       "node_modules",

@@ -240,6 +240,7 @@ module.exports = {
     ], // 后缀名自动补全
     alias: {
       '@': path.resolve(__dirname, '../src'),
+      '@API': path.resolve(__dirname, '../api'),
       '@T': path.resolve(__dirname, '../theme'),
       '@U': path.resolve(__dirname, '../utils')
     }

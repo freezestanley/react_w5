@@ -10,6 +10,7 @@
     "**/*.sass"
   ],
   "scripts": {
+    "start": "npm run serve",
     "serve": "cross-env NODE_ENV=development webpack serve -c ./config/dev.config.js",
     "build": "cross-env NODE_ENV=production webpack -c ./config/prd.config.js",
     "dashboard-build": "cross-env NODE_ENV=production webpack-dashboard -- webpack -c ./config/prd.config.js",
