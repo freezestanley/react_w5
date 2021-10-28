@@ -10,7 +10,8 @@ module.exports = merge(base, {
   devtool: 'eval-cheap-module-source-map',
   mode: 'development',
   optimization: {
-    usedExports: true
+    usedExports: true,
+    runtimeChunk: 'single'
   },
   devServer: {
     contentBase: 'public',
