@@ -31,12 +31,7 @@ module.exports = {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         use: [
-          // {
-          //   loader: 'thread-loader',
-          //   options: {
-          //     workers: require('os').cpus(),
-          //   }
-          // },
+          'cache-loader',
           {
             loader: 'ts-loader',
             options: {
@@ -55,6 +50,7 @@ module.exports = {
         test: /\.(js|jsx|mjs)$/,
         exclude: /node_modules/,
         use: [
+          'cache-loader',
           {
             loader: 'thread-loader',
             options: {
@@ -72,6 +68,7 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
+          'cache-loader',
           isEnvProduction ? miniCssExtractPlugin.loader : 'style-loader',
           {
             loader: 'css-loader',
@@ -90,6 +87,7 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
+          'cache-loader',
           isEnvProduction ? miniCssExtractPlugin.loader : 'style-loader',
           {
             loader: 'css-loader',
@@ -118,6 +116,7 @@ module.exports = {
       {
         test: /\.less$/i,
         use: [
+          'cache-loader',
           isEnvProduction ? miniCssExtractPlugin.loader : 'style-loader',
           {
             loader: 'css-loader',
