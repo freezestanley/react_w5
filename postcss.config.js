@@ -1,12 +1,14 @@
 module.exports = {
   plugins: [
+    // 'cssnano',
+    // 'autoprefixer'
     [
-      "postcss-preset-env",
+      'postcss-preset-env',
       {
         // Options
-        execute: true,
-        "postcss-short": { prefix: "x" }
-      },
-    ],
-  ],
-};
+        stage: 3,
+        browsers: ['> 1%', 'last 2 versions']
+      }
+    ]
+  ]
+}

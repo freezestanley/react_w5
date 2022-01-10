@@ -1,21 +1,35 @@
 const path = require('path')
 const Webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const miniCssExtractPlugin = require('mini-css-extract-plugin')
+
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+// const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
-const threadLoader = require('thread-loader')
+// const threadLoader = require('thread-loader')
 const DashboardPlugin = require('webpack-dashboard/plugin')
 // const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const StyleLintPlugin = require('stylelint-webpack-plugin')
+const miniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const isEnvProduction =
   process.env.NODE_ENV === 'production' ||
   process.env.NODE_ENV === 'development'
+
+const CssLoader = {
+  loader: 'css-loader',
+  options: {
+    url: true,
+    import: true,
+    sourceMap: false,
+    importLoaders: 1,
+    modules: {
+      localIdentName: '[path][local]-[hash:base64:5]'
+    }
+  }
+}
 
 module.exports = {
   stats: {
@@ -27,11 +41,21 @@ module.exports = {
   },
   module: {
     rules: [
+      // {
+      //   test: /\.(html|svelte)$/,
+      //   use: 'svelte-loader'
+      // },
+      // {
+      //   // required to prevent errors from Svelte on Webpack 5+, omit on Webpack 4
+      //   test: /node_modules\/svelte\/.*\.mjs$/,
+      //   resolve: {
+      //     fullySpecified: false
+      //   }
+      // },
       {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         use: [
-          'cache-loader',
           {
             loader: 'ts-loader',
             options: {
@@ -50,7 +74,6 @@ module.exports = {
         test: /\.(js|jsx|mjs)$/,
         exclude: /node_modules/,
         use: [
-          'cache-loader',
           {
             loader: 'thread-loader',
             options: {
@@ -68,38 +91,16 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          'cache-loader',
           isEnvProduction ? miniCssExtractPlugin.loader : 'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              url: true,
-              import: true,
-              sourceMap: false,
-              modules: {
-                localIdentName: '[path][local]-[hash:base64:5]'
-              }
-            }
-          },
+          CssLoader,
           'postcss-loader'
         ]
       },
       {
         test: /\.s[ac]ss$/i,
         use: [
-          'cache-loader',
           isEnvProduction ? miniCssExtractPlugin.loader : 'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              url: true,
-              import: true,
-              sourceMap: false,
-              modules: {
-                localIdentName: '[path][local]-[hash:base64:5]'
-              }
-            }
-          },
+          CssLoader,
           'postcss-loader',
           {
             loader: 'sass-loader',
@@ -116,19 +117,8 @@ module.exports = {
       {
         test: /\.less$/i,
         use: [
-          'cache-loader',
           isEnvProduction ? miniCssExtractPlugin.loader : 'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: false,
-              url: true,
-              import: true,
-              modules: {
-                localIdentName: '[path][local]-[hash:base64:5]'
-              }
-            }
-          },
+          CssLoader,
           'postcss-loader',
           {
             loader: 'less-loader',
@@ -161,7 +151,10 @@ module.exports = {
     ]
   },
   plugins: [
-    new ProgressBarPlugin(),
+    new ProgressBarPlugin({
+      format: 'build [:bar] ' + ':percent' + ' (:elapsed seconds)',
+      clear: false
+    }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: 'Hello React!',
@@ -176,14 +169,14 @@ module.exports = {
       filename: 'styles/[name].css',
       chunkFilename: 'styles/[id].css'
     }),
-    new OptimizeCssAssetsPlugin({
-      assetNameRegExp: /\.optimize\.css$/g,
-      cssProcessor: require('cssnano'),
-      cssProcessorPluginOptions: {
-        preset: ['default', { discardComments: { removeAll: true } }]
-      },
-      canPrint: true
-    }),
+    // new OptimizeCssAssetsPlugin({
+    //   assetNameRegExp: /\.optimize\.css$/g,
+    //   cssProcessor: require('cssnano'),
+    //   cssProcessorPluginOptions: {
+    //     preset: ['default', { discardComments: { removeAll: true } }]
+    //   },
+    //   canPrint: true
+    // }),
     new Webpack.ProvidePlugin({
       // shimming
       _: 'lodash'
@@ -235,13 +228,16 @@ module.exports = {
       '.css',
       '.wasm',
       '.sass',
-      '.scss'
+      '.scss',
+      '.svelte'
     ], // 后缀名自动补全
     alias: {
       '@': path.resolve(__dirname, '../src'),
       '@API': path.resolve(__dirname, '../api'),
       '@T': path.resolve(__dirname, '../theme'),
-      '@U': path.resolve(__dirname, '../utils')
-    }
+      '@U': path.resolve(__dirname, '../utils'),
+      svelte: path.resolve('node_modules', 'svelte')
+    },
+    mainFields: ['svelte', 'browser', 'module', 'main']
   }
 }

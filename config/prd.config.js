@@ -3,7 +3,7 @@ const Webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const miniCssExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+// const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const BundleAnalyzerPlugin =
   require('webpack-bundle-analyzer').BundleAnalyzerPlugin
@@ -11,6 +11,7 @@ const CompressionPlugin = require('compression-webpack-plugin')
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin')
 const ImageminWebpWebpackPlugin = require('imagemin-webp-webpack-plugin')
 const SentryCliPlugin = require('@sentry/webpack-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 
 const { merge } = require('webpack-merge')
 const base = require('./base.config')
@@ -25,6 +26,9 @@ let prd = merge(base, {
       new TerserPlugin({
         parallel: true, // 是否并行打包
         extractComments: false
+      }),
+      new CssMinimizerPlugin({
+        exclude: /\/node_modules/
       })
     ],
     runtimeChunk: {
